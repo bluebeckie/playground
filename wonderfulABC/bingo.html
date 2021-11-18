@@ -34,14 +34,13 @@ h1,h2,h3,h4,h5,h6,p {margin: 0 0 20px;word-break: break-all; }
 </style>
 <script
   src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
-  integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI="
   crossorigin="anonymous"></script>
 <body>
 <div class="container">
     <h1>BINGO</h1>
     <div class="lyrics-box"></div>
     <audio controls>
-        <source src="Dave And Ava - Bingo Dog Song.mp3" type="audio/mpeg">
+        <source src="song.mp3" type="audio/mpeg">
     </audio>
     <div style="text-align:right;"><img src="https://upload.wikimedia.org/wikipedia/commons/b/bd/CC-BY-NC-SA.svg" height="20px" alt="cc"/></div>
 </div>
@@ -53,7 +52,9 @@ h1,h2,h3,h4,h5,h6,p {margin: 0 0 20px;word-break: break-all; }
     let domWords;
     let total = 0;
     let currentIndex = 0;
+    let currentLineIndex = 0;
     let currentWord;
+    let lineIndex = [];
     lines.forEach(line => {
         const matches = line.match(/(\w+\-?\w?)/g);
         if (matches){
@@ -67,6 +68,7 @@ $(function(){
     let lyricsHTML = '';
     lyrics.forEach(line => {
         let currentLine = '';
+        lineIndex.push(total);
         line.forEach(word => {
             total = total + 1;
             currentLine += '<span class="word">' + word + '</span>';
@@ -79,19 +81,36 @@ $(function(){
     currentWord = domWords[currentIndex]; 
     currentWord.className = 'active word';
 
+    console.log(lineIndex);
     // bind keyboard events
     $(document).keydown(function(e) {
+
+        console.log('before:', lineIndex[currentLineIndex], currentIndex);
         switch (e.keyCode) {
             case 37:
-            case 38:
+                currentLineIndex = currentLineIndex === 0 ? lineIndex.length -1 : 
+                lineIndex[currentLineIndex] === currentIndex ? currentLineIndex -1: currentLineIndex;
                 currentIndex = currentIndex == 0 ? total -1 : currentIndex -1;
+                break;
+            case 38:
+                currentLineIndex = currentLineIndex === 0 ? lineIndex.length -1 : currentLineIndex -1;
+                currentIndex = lineIndex[currentLineIndex];
+                break;
+            case 40:
+                currentLineIndex = currentLineIndex === lineIndex.length -1 ? 0 : currentLineIndex +1;
+                currentIndex = lineIndex[currentLineIndex];
                 break;
             default: 
                 currentIndex = currentIndex == total -1 ? 0 : currentIndex +1;
+                currentLineIndex = lineIndex[currentLineIndex+1] == currentIndex 
+                    ? currentLineIndex +1 
+                    : currentIndex === 0 ?  0 : currentLineIndex;
                 break;
         };
+        console.log('after:', currentLineIndex, currentIndex); 
+        
         currentWord.className = 'word';
-        currentWord =domWords[currentIndex]; 
+        currentWord = domWords[currentIndex]; 
         currentWord.className = 'active word';
     });
 });
