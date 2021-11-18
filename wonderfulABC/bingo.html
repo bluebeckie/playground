@@ -81,11 +81,8 @@ $(function(){
     currentWord = domWords[currentIndex]; 
     currentWord.className = 'active word';
 
-    console.log(lineIndex);
     // bind keyboard events
     $(document).keydown(function(e) {
-
-        console.log('before:', lineIndex[currentLineIndex], currentIndex);
         switch (e.keyCode) {
             case 37:
                 currentLineIndex = currentLineIndex === 0 ? lineIndex.length -1 : 
@@ -107,8 +104,6 @@ $(function(){
                     : currentIndex === 0 ?  0 : currentLineIndex;
                 break;
         };
-        console.log('after:', currentLineIndex, currentIndex); 
-        
         currentWord.className = 'word';
         currentWord = domWords[currentIndex]; 
         currentWord.className = 'active word';
