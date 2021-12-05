@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<title>Bingo Song - Wonderful ABCs at RongFu Elementary School</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+html, body {
+    color:midnightblue; 
+    font-family: "Verdana,sans-serif"; 
+    font-size: 1.2em;
+    margin: 0;
+    padding: 0;
+    text-align:center;
+}
+h1,h2,h3,h4,h5,h6,p {margin: 0 0 20px;word-break: break-all; }
+.container { overflow:auto; padding-top:20px; position:relative; }
+.container::before {
+    background-color: rgba(255,255,255,0.2);
+    background-image: url('https://www.science.org/do/10.5555/article.2377327/full/1020babydog_1280x720.jpg');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    content: '';
+    display: block;
+    height: 100%;
+    opacity: 0.3;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 0;
+}
+.word { padding: 0 0.2em; }
+.active { color:orangered; }
+</style>
+<script
+  src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+  crossorigin="anonymous"></script>
+<body>
+<div class="container">
+    <h1>BINGO</h1>
+    <div class="lyrics-box"></div>
+    <audio controls>
+        <source src="song.mp3" type="audio/mpeg">
+    </audio>
+    <div style="text-align:right;"><img src="https://upload.wikimedia.org/wikipedia/commons/b/bd/CC-BY-NC-SA.svg" height="20px" alt="cc"/></div>
+</div>
+<script>
+    const originals = 'There was a farmer who had a dog. And Bingo was his name-o. B I N G O. B I N G O. B I N G O. And Bingo was his name-o.';
+    
+    const lines = originals.split('.');
+    const lyrics = [];
+    let domWords;
+    let total = 0;
+    let currentIndex = 0;
+    let currentLineIndex = 0;
+    let currentWord;
+    let lineIndex = [];
+    lines.forEach(line => {
+        const matches = line.match(/(\w+\-?\w?)/g);
+        if (matches){
+            lyrics.push(matches);
+        }
+    });
+
+    let lyricsBox = document.querySelector('.lyrics-box');
+
+$(function(){
+    let lyricsHTML = '';
+    lyrics.forEach(line => {
+        let currentLine = '';
+        lineIndex.push(total);
+        line.forEach(word => {
+            total = total + 1;
+            currentLine += '<span class="word">' + word + '</span>';
+        });
+        lyricsHTML += '<p>' + currentLine + '</p>';
+    });
+    lyricsBox.innerHTML = lyricsHTML;
+
+    domWords = document.querySelectorAll('.word');
+    currentWord = domWords[currentIndex]; 
+    currentWord.className = 'active word';
+
+    // bind keyboard events
+    $(document).keydown(function(e) {
+        switch (e.keyCode) {
+            case 37:
+                currentLineIndex = currentLineIndex === 0 ? lineIndex.length -1 : 
+                lineIndex[currentLineIndex] === currentIndex ? currentLineIndex -1: currentLineIndex;
+                currentIndex = currentIndex == 0 ? total -1 : currentIndex -1;
+                break;
+            case 38:
+                currentLineIndex = currentLineIndex === 0 ? lineIndex.length -1 : currentLineIndex -1;
+                currentIndex = lineIndex[currentLineIndex];
+                break;
+            case 40:
+                currentLineIndex = currentLineIndex === lineIndex.length -1 ? 0 : currentLineIndex +1;
+                currentIndex = lineIndex[currentLineIndex];
+                break;
+            default: 
+                currentIndex = currentIndex == total -1 ? 0 : currentIndex +1;
+                currentLineIndex = lineIndex[currentLineIndex+1] == currentIndex 
+                    ? currentLineIndex +1 
+                    : currentIndex === 0 ?  0 : currentLineIndex;
+                break;
+        };
+        currentWord.className = 'word';
+        currentWord = domWords[currentIndex]; 
+        currentWord.className = 'active word';
+    });
+});
+
+</script>
+<!--
+    For educational prupose only
+    audio credit: Dave and Ava: https://www.youtube.com/channel/UC6zhI71atP7YLoZyIyCIGNw
+    image credit: https://www.science.org/content/article/are-dogs-manipulating-you-their-puppy-eyes
+-->
+</body>
+</html>
