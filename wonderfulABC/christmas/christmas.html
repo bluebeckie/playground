@@ -12,7 +12,7 @@ html, body {
     padding: 0;
     text-align:center;
 }
-h1,h2,h3,h4,h5,h6,p {margin: 0 0 20px;word-break: break-all; }
+h1,h2,h3,h4,h5,h6 {margin: 0 0 20px;word-break: break-all; }
 .container { overflow:auto; padding-top:20px; position:relative; }
 .container::before {
     background-color: rgba(255,255,255,0.2);
@@ -29,9 +29,21 @@ h1,h2,h3,h4,h5,h6,p {margin: 0 0 20px;word-break: break-all; }
     width: 100%;
     z-index: 0;
 }
-.lyrics-container { display: flex; flex-direction: row; }
+.lyrics-container { display: flex; flex-direction: row; margin-inline: auto; width: 85%; }
+.lyrics-container aside { width: 40%; flex-grow: 0; }
+.lyrics-box { flex-grow: 1; }
 .active { color: red; }
-p { margin-block: 10px;}
+p { margin-block: 1vw;}
+
+@media only screen and (max-width: 1024px) {
+    .lyrics-container {
+        width: 100%;
+    }
+    .lyrics-container aside {
+        width: 45%;
+    }
+}
+
 </style>
 <script
   src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
@@ -40,7 +52,7 @@ p { margin-block: 10px;}
 <div class="container">
     <h1>12 Days of Christmas</h1>
     <div class="lyrics-container">
-        <img src="12daysofchristmas.jpeg" />
+        <aside><img src="12daysofchristmas.jpeg" width="100%"/></aside>
         <div class="lyrics-box"></div>
     </div>
     <audio controls>
