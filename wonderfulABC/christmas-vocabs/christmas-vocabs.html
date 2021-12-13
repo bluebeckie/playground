@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<title>Christmas Word Search - Wonderful ABCs at RongFu Elementary School</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+html, body {
+    color:midnightblue;
+    font-family: "Verdana,sans-serif";
+    font-size: 1.2em;
+    margin: 0;
+    padding: 0;
+}
+h1,h2,h3,h4,h5,h6 {margin: 0 0 20px;word-break: break-all; text-align: center;}
+h1 { color: red;}
+.container { overflow:auto; padding-top:20px; position:relative; }
+.container::before {
+    background-color: rgba(255,255,255,0.2);
+    background-image: url('https://nationaltoday.com/wp-content/uploads/2019/12/christmas-1-1200x834.jpg');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    content: '';
+    display: block;
+    height: 100%;
+    opacity: 0.2;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 0;
+}
+.lyrics-container { display: flex; flex-direction: row; margin-inline: auto; width: 85%; }
+.lyrics-container aside { margin-right: 20px; width: 60%; flex-grow: 0;}
+.lyrics-container aside table { margin-left: auto; position:relative; z-index:1;}
+.lyrics-box { flex-grow: 1; margin-right: 20px;}
+.photo { width:360px; flex-grow: 0; flex-shrink: 0; display:flex; align-items: center; }
+.photo img { max-height: 300px; }
+.active { color: red; }
+p { margin-block: 1vw;}
+table td { border:1px solid gray; padding: 5px; margin:0; text-align: center;}
+.cell.on { background: white; color: red; }
+button { display:block; font-size: 16px; margin: 10px auto; padding:5px; position:relative; z-index:1;}
+/* @media only screen and (max-width: 1024px) {
+    .lyrics-container {
+        width: 100%;
+    }
+    .lyrics-container aside {
+        width: 45%;
+    }
+} */
+
+</style>
+<script
+  src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+  crossorigin="anonymous"></script>
+<body>
+<div class="container">
+    <h1>Merry Christmas!!</h1>
+    <div class="lyrics-container">
+        <aside></aside>
+        <div class="lyrics-box"></div>
+        <div class="photo"><img src="christmas.jpeg" /></div>
+    </div>
+    <button type="button">refresh</button>
+    <div style="text-align:right;"><img src="https://upload.wikimedia.org/wikipedia/commons/b/bd/CC-BY-NC-SA.svg" height="20px" alt="cc"/></div>
+</div>
+<script>
+    const words = 'christmas, tree, star, santa, candy cane, cake, snowman, reindeer, sleigh, jingle bell, gingerbread, ornament';
+    const letters = ` \
+        C, A, N, D, Y, C, A, N, E, A, J, \
+        Y, H, S, N, O, W, M, A, N, I, I, \
+        C, O, R, E, I, N, D, E, E, R, N, \
+        A, R, E, I, P, D, O, G, L, O, G, \
+        K, N, S, Q, S, A, N, Y, Y, O, L, \
+        E, A, T, E, L, T, E, T, R, E, E, \
+        Q, M, N, X, E, N, M, O, O, S, B, \
+        P, E, T, N, I, S, E, A, M, A, E, \
+        R, N, E, A, G, T, O, N, S, N, L, \
+        S, T, E, H, H, A, N, O, U, T, L, \
+        G, I, N, G, E, R, B, R, E, A, D`;
+    const lines = words.split(',');
+    let domWords;
+    let total = lines.length;
+    let currentLineIndex = 0;
+    let currentLine;
+    let lyricsBox = document.querySelector('.lyrics-box');
+
+$(function(){
+    let lyricsHTML = '';
+    lines.forEach(line => {
+        lyricsHTML += '<p class="line">' + line + '</p>';
+    });
+    lyricsBox.innerHTML = lyricsHTML;
+
+    domWords = document.querySelectorAll('.line');
+    currentLine = domWords[currentLineIndex];
+    currentLine.className = 'active line';
+
+    const img = document.querySelector('.container .photo img');
+
+    // draw letter table
+    let letterText = letters.split(',');
+    const reducer = (html, letter, idx) => {
+        const cell = `<td class="cell">${letter.trim()}</td>`;
+        html += (idx % 11) === 0 ? '<tr>'+ cell : cell;
+        html += (idx % 11) === 10 ? '</td></tr>' : '';
+        html += (idx === letterText.length -1) ? '</table>' : '';
+        return html;
+    };
+    document.querySelector('aside').innerHTML = letterText.reduce(reducer, `<table>`);
+    const letterTable = document.querySelector('table');
+    const cells = letterTable.getElementsByTagName('td');
+    $('button').click(function(e) {
+        for (let i =0 ; i < cells.length; i++) {
+            cells[i].className = 'cell';
+        }
+    });
+
+    $('.container table').click(function(e) {
+        e.target.className = e.target.className.indexOf('on') > 0 ? 'cell' : 'cell on';
+    });
+
+    // bind keyboard events
+    $(document).keydown(function(e) {
+        switch (e.keyCode) {
+            case 38: // up
+                currentLineIndex = currentLineIndex === 0 ? total -1 : currentLineIndex -1;
+                img.src = lines[currentLineIndex] + '.jpeg';
+                break;
+            case 40: // down
+                currentLineIndex = currentLineIndex === total -1 ? 0 : currentLineIndex +1;
+                img.src = lines[currentLineIndex] + '.jpeg';
+                break;
+            default: break;
+        };
+        currentLine.className = 'line';
+        currentLine = domWords[currentLineIndex];
+        currentLine.className = 'active line';
+    });
+});
+
+</script>
+<!--
+    For educational prupose only
+-->
+</body>
+</html>
