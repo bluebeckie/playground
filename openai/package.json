@@ -1,0 +1,27 @@
+{
+  "name": "beckie-openai",
+  "version": "1.0.0",
+  "description": "test openai APIs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bluebeckie/playground.git"
+  },
+  "keywords": [
+    "openai",
+    "chatgpt"
+  ],
+  "author": "beckie fang <beckie_fang@worldvision.org.tw>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bluebeckie/playground/issues"
+  },
+  "homepage": "https://github.com/bluebeckie/playground#readme",
+  "dependencies": {
+    "openai": "^3.2.1"
+  }
+}
