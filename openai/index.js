@@ -29,7 +29,39 @@ async function testDavinci() {
     }
   }
 };
-testDavinci();
+// testDavinci();
+
+async function testWords() {
+  try {
+    const completion = await openai.createCompletion({
+      model: "text-davinci-003",
+      temperature: 0,
+      max_tokens: 50,
+      prompt:`please list several words that spells and sounds like the provided ones 
+
+      example1: hay
+      returns: bay, may, way, day, pay
+
+      exmaple2: how
+      returns: bow, cow, now, wow
+
+      example3: school
+      returns:
+      `
+    });
+
+    console.log(completion.data.choices[0].text);
+
+  } catch (error) {
+    if (error.response) {
+      console.log(error.response.status);
+      console.log(error.response.data);
+    } else {
+      console.log(error.message);
+    }
+  }
+};
+testWords();
 
 
 // testWhisper();
